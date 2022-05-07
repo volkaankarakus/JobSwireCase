@@ -38,6 +38,9 @@ dependencies:
   #dio
   dio: ^4.0.6
 
+  #states
+  provider : ^6.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
