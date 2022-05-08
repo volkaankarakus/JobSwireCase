@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jobswire_case/collectapi_resource/model/news_model.dart';
 import 'package:jobswire_case/collectapi_resource/service/collectapi_service.dart';
@@ -9,7 +8,6 @@ import 'package:jobswire_case/product/constant/lottie_items.dart';
 import 'package:jobswire_case/product/global/theme_notifier.dart';
 import 'package:jobswire_case/product/service/project_network_manager.dart';
 import 'package:jobswire_case/view_model/collectapi_provider_model.dart';
-import 'package:jobswire_case/view_model/collectapi_view_model.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
