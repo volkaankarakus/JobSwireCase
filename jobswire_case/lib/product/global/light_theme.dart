@@ -10,7 +10,7 @@ class LightTheme {
         appBarTheme: const AppBarTheme(
           titleTextStyle: TextStyle(color: Colors.white),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)))),
-        scaffoldBackgroundColor: Colors.white.withOpacity(0.9),
+        scaffoldBackgroundColor: Colors.white70.withOpacity(0.9),
 
         cardTheme: CardTheme(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0))),
 

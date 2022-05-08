@@ -44,15 +44,7 @@ class _CollectApiViewState extends State<CollectApiView> with ProjectDioMixin,Ti
               : Text('Jobswire Case',style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white,
                 fontWeight: FontWeight.w600)),
             actions: [
-              InkWell(
-                onTap: (){
-                  controller.animateTo(context.read<ThemeNotifier>().isLightTheme ? 0.5 : 1);
-                  context.read<ThemeNotifier>().changeTheme();
-                },
-                  child: Lottie.asset(
-                      LottieItems.themeChange.lottiePath,
-                      repeat: false,
-                  controller: controller))
+              lottieButton(context)
             ],),
           body: context.watch<CollectApiProvider>().isLoading
             ? Center(child: Lottie.asset(LottieItems.loading.lottiePath))
@@ -72,6 +64,18 @@ class _CollectApiViewState extends State<CollectApiView> with ProjectDioMixin,Ti
       });
   }
 
+  InkWell lottieButton(BuildContext context) {
+    return InkWell(
+              onTap: (){
+                controller.animateTo(context.read<ThemeNotifier>().isLightTheme ? 0.5 : 1);
+                context.read<ThemeNotifier>().changeTheme();
+              },
+                child: Lottie.asset(
+                    LottieItems.themeChange.lottiePath,
+                    repeat: false,
+                controller: controller));
+  }
+
 
   ListView _newsListView(BuildContext context, List<Result> items) {
     return ListView.builder(
@@ -79,9 +83,7 @@ class _CollectApiViewState extends State<CollectApiView> with ProjectDioMixin,Ti
             itemBuilder: (BuildContext context,int index) {
               return InkWell(
                 onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_){
-                    return CollectApiDetailView();
-                  }));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CollectApiDetailView(result: items[index],)));
                 },
                 child: Card(
                   elevation: 5,
