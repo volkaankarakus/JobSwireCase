@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:jobswire_case/product/global/dark_theme.dart';
+import 'package:jobswire_case/product/global/light_theme.dart';
 
 class ThemeNotifier extends ChangeNotifier{
-  bool isLightTheme = false;
+  bool isLightTheme = true;
 
   void changeTheme(){
     isLightTheme = !isLightTheme;
     notifyListeners();
   }
 
-  ThemeData get currentTheme => isLightTheme ? ThemeData.light() : ThemeData.dark();
+  ThemeData get currentTheme => isLightTheme ? LightTheme().theme : DarkTheme().theme;
 }

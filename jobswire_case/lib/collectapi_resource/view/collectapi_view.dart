@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jobswire_case/collectapi_resource/model/news_model.dart';
 import 'package:jobswire_case/collectapi_resource/service/collectapi_service.dart';
+import 'package:jobswire_case/collectapi_resource/view/collectapi_detail_view.dart';
+import 'package:jobswire_case/product/constant/duration_items.dart';
+import 'package:jobswire_case/product/constant/lottie_items.dart';
 import 'package:jobswire_case/product/global/theme_notifier.dart';
 import 'package:jobswire_case/product/service/project_network_manager.dart';
 import 'package:jobswire_case/view_model/collectapi_provider_model.dart';
 import 'package:jobswire_case/view_model/collectapi_view_model.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class CollectApiView extends StatefulWidget {
@@ -15,10 +20,14 @@ class CollectApiView extends StatefulWidget {
 }
 
 //class _CollectApiViewState extends CollectApiViewModel {
-class _CollectApiViewState extends State<CollectApiView> with ProjectDioMixin {
+class _CollectApiViewState extends State<CollectApiView> with ProjectDioMixin,TickerProviderStateMixin {
+
+  late AnimationController controller;
+
   @override
   void initState() {
     super.initState();
+    controller = AnimationController(vsync: this,duration: DurationItems.durationNormal());
   }
 
   @override
@@ -28,13 +37,26 @@ class _CollectApiViewState extends State<CollectApiView> with ProjectDioMixin {
       builder: (context, child) {
         return Scaffold(
           appBar: AppBar(
+            //systemOverlayStyle: SystemUiOverlayStyle.dark,
+            centerTitle: true,
             title: context.watch<CollectApiProvider>().isLoading
               ? CircularProgressIndicator(color: Colors.white)
-              : null,
+              : Text('Jobswire Case',style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white,
+                fontWeight: FontWeight.w600)),
             actions: [
-              appBarIconButton(context)
+              InkWell(
+                onTap: (){
+                  controller.animateTo(context.read<ThemeNotifier>().isLightTheme ? 0.5 : 1);
+                  context.read<ThemeNotifier>().changeTheme();
+                },
+                  child: Lottie.asset(
+                      LottieItems.themeChange.lottiePath,
+                      repeat: false,
+                  controller: controller))
             ],),
-          body: Padding(
+          body: context.watch<CollectApiProvider>().isLoading
+            ? Center(child: Lottie.asset(LottieItems.loading.lottiePath))
+          : Padding(
             padding: PaddingUtility().paddingSymmetric,
             child: Column(
                 children : [
@@ -46,42 +68,45 @@ class _CollectApiViewState extends State<CollectApiView> with ProjectDioMixin {
                 ],
             ),
           ),
-
         );
       });
   }
 
-  IconButton appBarIconButton(BuildContext context) {
-    return IconButton(
-                onPressed: (){
-                  context.read<ThemeNotifier>().changeTheme();
-                },
-                icon: context.read<ThemeNotifier>().isLightTheme ?  Icon(Icons.dark_mode) : Icon(Icons.light_mode));
-  }
 
   ListView _newsListView(BuildContext context, List<Result> items) {
     return ListView.builder(
             itemCount: items.length,
             itemBuilder: (BuildContext context,int index) {
-              return Card(
-                margin: PaddingUtility().paddingBottom,
-                child: SizedBox(
-                  height: 300,
-                  child: Padding(
-                    padding: PaddingUtility().paddingAllCard,
-                    child: Column(
-                        children : [
-                          Expanded(
-                              child: Image.network(items[index].image ?? '',fit: BoxFit.cover, )
-                          ),
-                          Padding(
-                            padding: PaddingUtility().paddingTop,
-                            child: Column(
-                                crossAxisAlignment : CrossAxisAlignment.center,
-                                children : [
-                                  Text(items[index].name ?? '')]),
-                          ),
-                        ]
+              return InkWell(
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                    return CollectApiDetailView();
+                  }));
+                },
+                child: Card(
+                  elevation: 5,
+                  margin: PaddingUtility().paddingBottom,
+                  child: SizedBox(
+                    height: 300,
+                    child: Padding(
+                      padding: PaddingUtility().paddingAllCard,
+                      child: Column(
+                          children : [
+                            Expanded(
+                                child: Image.network(items[index].image ?? '',fit: BoxFit.cover, )
+                            ),
+                            Padding(
+                              padding: PaddingUtility().paddingTop,
+                              child: Column(
+                                  crossAxisAlignment : CrossAxisAlignment.center,
+                                  children : [
+                                    Text(
+                                        items[index].name ?? '',
+                                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                            fontWeight: FontWeight.w400),)]),
+                            ),
+                          ]
+                      ),
                     ),
                   ),
                 ),
