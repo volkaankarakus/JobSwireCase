@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:jobswire_case/collectapi_resource/model/news_model.dart';
 import 'package:jobswire_case/collectapi_resource/service/collectapi_service.dart';
 import 'package:jobswire_case/collectapi_resource/view/collectapi_detail_view.dart';
@@ -36,16 +37,7 @@ class _CollectApiViewState extends State<CollectApiView> with ProjectDioMixin,Ti
       create: (context) => CollectApiProvider(CollectApiService(service)),
       builder: (context, child) {
         return Scaffold(
-          appBar: AppBar(
-            //systemOverlayStyle: SystemUiOverlayStyle.dark,
-            centerTitle: true,
-            title: context.watch<CollectApiProvider>().isLoading
-              ? CircularProgressIndicator(color: Colors.white)
-              : Text('Jobswire Case',style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white,
-                fontWeight: FontWeight.w600)),
-            actions: [
-              lottieButton(context)
-            ],),
+          appBar: _costumizedAppBar(context),
           body: context.watch<CollectApiProvider>().isLoading
             ? Center(child: Lottie.asset(LottieItems.loading.lottiePath))
           : Padding(
@@ -62,6 +54,21 @@ class _CollectApiViewState extends State<CollectApiView> with ProjectDioMixin,Ti
           ),
         );
       });
+  }
+
+  AppBar _costumizedAppBar(BuildContext context) {
+    return AppBar(
+          centerTitle: true,
+          title: context.watch<CollectApiProvider>().isLoading
+            ? CircularProgressIndicator(color: Colors.white)
+            : Text('Jobswire',style: GoogleFonts.oleoScript().copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            fontSize: 30
+          )),
+          actions: [
+            lottieButton(context)
+          ],);
   }
 
   InkWell lottieButton(BuildContext context) {
@@ -95,7 +102,9 @@ class _CollectApiViewState extends State<CollectApiView> with ProjectDioMixin,Ti
                       child: Column(
                           children : [
                             Expanded(
-                                child: Image.network(items[index].image ?? '',fit: BoxFit.cover, )
+                                child: Hero(
+                                  tag: items[index],
+                                    child: Image.network(items[index].image ?? '',fit: BoxFit.cover, ))
                             ),
                             Padding(
                               padding: PaddingUtility().paddingTop,

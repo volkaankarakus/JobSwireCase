@@ -33,10 +33,12 @@ class _CollectApiDetailViewState extends State<CollectApiDetailView> {
               padding: PaddingUtility().paddingAllCard,
               child: Column(children: [
                 Expanded(
-                    child: Image.network(
+                    child: Hero(tag : widget.result,
+                      child: Image.network(
                   widget.result.image ?? '',
                   fit: BoxFit.cover,
-                )),
+                ),
+                    )),
                 Padding(
                   padding: PaddingUtility().paddingTop,
                   child: Column(
